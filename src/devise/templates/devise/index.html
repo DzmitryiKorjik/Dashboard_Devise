@@ -27,35 +27,42 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const daysLabels = {{ days_labels|safe }};  // ✅ JSON теперь корректный
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>
 
-        {% for currency, rates in data.items %}
-            {  // Открываем блочный скоуп
-                const chartData = {{ rates|safe }};  // ✅ Теперь внутри блока
-                let ctx = document.getElementById("chart-{{ currency }}").getContext("2d");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: daysLabels,
-                        datasets: [{
-                            label: "{{ currency }}",
-                            data: chartData,
-                            fill: true,
-                            borderColor: 'rgb(255, 128, 128)',
-                            borderWidth: 1
-                        }]
-                    }
-                });
-            }  // Закрываем блочный скоуп
-        {% endfor %}
-    });
-</script>
+            const daysLabels = {{ days_labels|safe }};
 
+            {% for currency, rates in data.items %}
+                {
+                    const chartData = {{ rates|safe }};
+                    let ctx = document.getElementById("chart-{{ currency }}").getContext("2d");
 
-
-
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: daysLabels,
+                            datasets: [{
+                                label: "{{ currency }}",
+                                data: chartData,
+                                fill: true,
+                                borderColor: 'rgb(255, 128, 128)',
+                                borderWidth: 1,
+                                trendlineLinear: {
+                                    lineStyle: "dashed",
+                                    width: 3,
+                                    label: {
+                                        color: 'white'
+                                    }
+                                }
+                            }]
+                        }
+                    });
+                }
+            {% endfor %}
+        });
+    </script>
 </body>
 </html>

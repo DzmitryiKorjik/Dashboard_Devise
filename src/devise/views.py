@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 import api
+
+def redirect_index(request):
+    return redirect("home", days_range=30, currencies="EUR,USD")
 
 # Create your views here.
 def dashboard(request, days_range=30, currencies="USD"):
